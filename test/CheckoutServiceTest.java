@@ -16,7 +16,7 @@ public class CheckoutServiceTest {
         checkoutService = new CheckoutService();
         checkoutService.openCheck();
 
-        milk_7 = new Product(7, "Milk", Category.MILK);
+        milk_7 = new Product(7, "Milk", Category.MILK, Trademark.YAGOTUNSKE);
         bred_3 = new Product(3, "Bred");
     }
 
@@ -130,5 +130,18 @@ public class CheckoutServiceTest {
         Check check = checkoutService.closeCheck();
 
         assertThat(check.getTotalCost(), is(10));
+    }
+
+    @Test
+    void useOffer__factorByTrademark() {
+        checkoutService.addProduct(milk_7);
+        checkoutService.addProduct(milk_7);
+        checkoutService.addProduct(milk_7);
+        checkoutService.addProduct(bred_3);
+
+        checkoutService.useOffer(new FactorByTrademark(Trademark.YAGOTUNSKE, 20,10,"30.07.2019"));
+        Check check = checkoutService.closeCheck();
+
+        assertThat(check.getTotalPoints(), is(34));
     }
 }

@@ -33,6 +33,13 @@ public class Check {
                 .reduce(0, (a, b) -> a + b);
     }
 
+    int getCostByTrademark(Trademark trademark) {
+        return products.stream()
+                .filter(p -> p.trademark == trademark)
+                .mapToInt(p -> p.price)
+                .reduce(0, (a, b) -> a + b);
+    }
+
     void addOffer(Offer offer) {
         usedOffers.add(offer);
     }
