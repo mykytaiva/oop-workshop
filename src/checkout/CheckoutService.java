@@ -29,6 +29,8 @@ public class CheckoutService {
     }
 
     public void useOffer(Offer offer) {
-        offers.add(offer);
+        if (offer.isValidDate()) {
+            offers.add(offer);
+        }
     }
 }

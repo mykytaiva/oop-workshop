@@ -62,7 +62,7 @@ public class CheckoutServiceTest {
         checkoutService.addProduct(milk_7);
         checkoutService.addProduct(bred_3);
 
-        checkoutService.useOffer(new AnyGoodsOffer(6, 2));
+        checkoutService.useOffer(new AnyGoodsOffer(6, 2, "30.07.2019"));
         Check check = checkoutService.closeCheck();
 
         assertThat(check.getTotalPoints(), is(12));
@@ -73,7 +73,7 @@ public class CheckoutServiceTest {
         checkoutService.addProduct(bred_3);
         Check check = checkoutService.closeCheck();
 
-        checkoutService.useOffer(new AnyGoodsOffer(6, 2));
+        checkoutService.useOffer(new AnyGoodsOffer(6, 2,"30.07.2019"));
 
         assertThat(check.getTotalPoints(), is(3));
     }
@@ -84,7 +84,7 @@ public class CheckoutServiceTest {
         checkoutService.addProduct(milk_7);
         checkoutService.addProduct(bred_3);
 
-        checkoutService.useOffer(new FactorByCategoryOffer(Category.MILK, 2));
+        checkoutService.useOffer(new FactorByCategoryOffer(Category.MILK, 2,"30.07.2019"));
         Check check = checkoutService.closeCheck();
 
         assertThat(check.getTotalPoints(), is(31));
@@ -94,11 +94,11 @@ public class CheckoutServiceTest {
     void useOffer__beforeCheckIsClosed() {
         checkoutService.addProduct(milk_7);
 
-        checkoutService.useOffer(new FactorByCategoryOffer(Category.MILK, 2));
+        checkoutService.useOffer(new FactorByCategoryOffer(Category.MILK, 2,"30.07.2019"));
 
         checkoutService.addProduct(milk_7);
 
-        checkoutService.useOffer(new AnyGoodsOffer(40, 2));
+        checkoutService.useOffer(new AnyGoodsOffer(40, 2, "30.07.2019"));
 
         checkoutService.addProduct(bred_3);
 
@@ -106,5 +106,17 @@ public class CheckoutServiceTest {
 
         assertThat(check.getTotalPoints(), is(31));
         assertThat(check.getUsedOffers(), is(1));
+    }
+
+    @Test
+    void useOffer__checkExpiryDate() {
+        checkoutService.addProduct(milk_7);
+        checkoutService.addProduct(bred_3);
+
+        checkoutService.useOffer(new AnyGoodsOffer(6, 2, "30.08.2019"));
+
+        Check check = checkoutService.closeCheck();
+
+        assertThat(check.getTotalPoints(), is(12));
     }
 }
