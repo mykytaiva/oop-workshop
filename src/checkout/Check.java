@@ -7,17 +7,15 @@ public class Check {
     private List<Product> products = new ArrayList<>();
     private List<Offer> usedOffers = new ArrayList<>();
     private int points = 0;
+    private int totalCost = 0;
 
     public int getTotalCost() {
-        int totalCost = 0;
-        for (Product product : this.products) {
-            totalCost += product.price;
-        }
         return totalCost;
     }
 
     void addProduct(Product product) {
         products.add(product);
+        totalCost += product.price;
     }
 
     public int getTotalPoints() {
@@ -41,6 +39,14 @@ public class Check {
 
     public int getUsedOffers() {
         return usedOffers.size();
+    }
+
+    public List<Product> getProducts() {
+        return this.products;
+    }
+
+    public void getDiscountCost(int price) {
+        this.totalCost -= price;
     }
 
 }

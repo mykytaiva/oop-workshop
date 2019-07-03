@@ -114,9 +114,21 @@ public class CheckoutServiceTest {
         checkoutService.addProduct(bred_3);
 
         checkoutService.useOffer(new AnyGoodsOffer(6, 2, "30.08.2019"));
-
         Check check = checkoutService.closeCheck();
 
         assertThat(check.getTotalPoints(), is(12));
+    }
+
+    @Test
+    void useOffer__getHalfPriceDiscount() {
+        checkoutService.useOffer(new DiscountOffer(Category.MILK, "30.07.2019"));
+
+        checkoutService.addProduct(milk_7);
+        checkoutService.addProduct(bred_3);
+        checkoutService.addProduct(bred_3);
+
+        Check check = checkoutService.closeCheck();
+
+        assertThat(check.getTotalCost(), is(10));
     }
 }
