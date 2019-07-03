@@ -71,9 +71,9 @@ public class CheckoutServiceTest {
     @Test
     void useOffer__whenCostLessThanRequired__doNothing() {
         checkoutService.addProduct(bred_3);
+        Check check = checkoutService.closeCheck();
 
         checkoutService.useOffer(new AnyGoodsOffer(6, 2));
-        Check check = checkoutService.closeCheck();
 
         assertThat(check.getTotalPoints(), is(3));
     }
@@ -88,5 +88,23 @@ public class CheckoutServiceTest {
         Check check = checkoutService.closeCheck();
 
         assertThat(check.getTotalPoints(), is(31));
+    }
+
+    @Test
+    void useOffer__beforeCheckIsClosed() {
+        checkoutService.addProduct(milk_7);
+
+        checkoutService.useOffer(new FactorByCategoryOffer(Category.MILK, 2));
+
+        checkoutService.addProduct(milk_7);
+
+        checkoutService.useOffer(new AnyGoodsOffer(40, 2));
+
+        checkoutService.addProduct(bred_3);
+
+        Check check = checkoutService.closeCheck();
+
+        assertThat(check.getTotalPoints(), is(31));
+        assertThat(check.getUsedOffers(), is(1));
     }
 }

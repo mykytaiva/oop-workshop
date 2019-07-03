@@ -13,5 +13,9 @@ public class FactorByCategoryOffer extends Offer {
     public void apply(Check check) {
         int points = check.getCostByCategory(this.category);
         check.addPoints(points * (this.factor - 1));
+
+        if (points != 0) {
+            check.addOffer(this);
+        }
     }
 }
