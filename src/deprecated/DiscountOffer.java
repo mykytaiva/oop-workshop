@@ -1,4 +1,4 @@
-package checkout;
+/*package checkout;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -35,3 +35,4 @@ public class DiscountOffer extends Offer {
         suitableProducts.clear();
     }
 }
+*/

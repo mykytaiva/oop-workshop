@@ -19,7 +19,7 @@ public class CheckoutServiceTest {
         checkoutService = new CheckoutService();
         checkoutService.openCheck();
 
-        testDate = LocalDate.of(2019, 8, 30);
+        testDate = LocalDate.now().plusDays(1);
         milk_7 = new Product(7, "Milk", Category.MILK, Trademark.YAGOTUNSKE);
         bred_3 = new Product(3, "Bred");
     }
@@ -66,7 +66,10 @@ public class CheckoutServiceTest {
         checkoutService.addProduct(milk_7);
         checkoutService.addProduct(bred_3);
 
-        checkoutService.useOffer(new AnyGoodsOffer(6, 2, testDate));
+        Condition condition = new TotalCost(6);
+        Reward reward = new FlatReward(2);
+
+        checkoutService.useOffer(new BonusOffer(testDate, condition, reward));
         Check check = checkoutService.closeCheck();
 
         assertThat(check.getTotalPoints(), is(12));
@@ -77,10 +80,14 @@ public class CheckoutServiceTest {
         checkoutService.addProduct(bred_3);
         Check check = checkoutService.closeCheck();
 
-        checkoutService.useOffer(new AnyGoodsOffer(6, 2, testDate));
+        Condition condition = new TotalCost(6);
+        Reward reward = new FlatReward(2);
+
+        checkoutService.useOffer(new BonusOffer(testDate, condition, reward));
 
         assertThat(check.getTotalPoints(), is(3));
     }
+
 
     @Test
     void useOffer__factorByCategory() {
@@ -88,7 +95,10 @@ public class CheckoutServiceTest {
         checkoutService.addProduct(milk_7);
         checkoutService.addProduct(bred_3);
 
-        checkoutService.useOffer(new FactorByCategoryOffer(Category.MILK, 2, testDate));
+        Condition condition = new ByCategory(Category.MILK);
+        Reward reward = new FactorReward(p -> p.getProductCategory() == Category.MILK, 2);
+
+        checkoutService.useOffer(new BonusOffer(testDate, condition, reward));
         Check check = checkoutService.closeCheck();
 
         assertThat(check.getTotalPoints(), is(31));
@@ -98,11 +108,15 @@ public class CheckoutServiceTest {
     void useOffer__beforeCheckIsClosed() {
         checkoutService.addProduct(milk_7);
 
-        checkoutService.useOffer(new FactorByCategoryOffer(Category.MILK, 2, testDate));
+        Condition first_condition = new ByCategory(Category.MILK);
+        Reward first_reward = new FactorReward(p -> p.getProductCategory() == Category.MILK, 2);
+        checkoutService.useOffer(new BonusOffer(testDate, first_condition, first_reward));
 
         checkoutService.addProduct(milk_7);
 
-        checkoutService.useOffer(new AnyGoodsOffer(40, 2, testDate));
+        Condition second_condition = new TotalCost(40);
+        Reward second_reward = new FlatReward(2);
+        checkoutService.useOffer(new BonusOffer(testDate, second_condition, second_reward));
 
         checkoutService.addProduct(bred_3);
 
@@ -117,12 +131,16 @@ public class CheckoutServiceTest {
         checkoutService.addProduct(milk_7);
         checkoutService.addProduct(bred_3);
 
-        checkoutService.useOffer(new AnyGoodsOffer(6, 2, testDate));
+        Condition condition = new TotalCost(6);
+        Reward reward = new FlatReward(2);
+
+        checkoutService.useOffer(new BonusOffer(testDate, condition, reward));
         Check check = checkoutService.closeCheck();
 
         assertThat(check.getTotalPoints(), is(12));
     }
 
+    /*
     @Test
     void useOffer__getHalfPriceDiscount() {
         checkoutService.useOffer(new DiscountOffer(Category.MILK, testDate));
@@ -134,7 +152,7 @@ public class CheckoutServiceTest {
         Check check = checkoutService.closeCheck();
 
         assertThat(check.getTotalCost(), is(10));
-    }
+    }*/
 
     @Test
     void useOffer__factorByTrademark() {
@@ -143,10 +161,94 @@ public class CheckoutServiceTest {
         checkoutService.addProduct(milk_7);
         checkoutService.addProduct(bred_3);
 
-        checkoutService.useOffer(new TrademarkOffer(Trademark.YAGOTUNSKE, 20,10, testDate));
+        Condition condition = new ByTrademark(20, Trademark.YAGOTUNSKE);
+        Reward reward = new FlatReward(10);
 
+        checkoutService.useOffer(new BonusOffer(testDate, condition, reward));
         Check check = checkoutService.closeCheck();
 
         assertThat(check.getTotalPoints(), is(34));
+    }
+
+
+    @Test
+    void useOffer__extraFlatPointsByTotalCost() {
+        checkoutService.addProduct(milk_7);
+        checkoutService.addProduct(milk_7);
+        checkoutService.addProduct(bred_3);
+        checkoutService.addProduct(bred_3);
+
+        Condition condition = new TotalCost(15);
+        Reward reward = new FlatReward(10);
+
+        checkoutService.useOffer(new BonusOffer(testDate, condition, reward));
+
+        Check check = checkoutService.closeCheck();
+
+        assertThat(check.getTotalPoints(), is(30));
+    }
+
+    @Test
+    void useOffer__extraFlatPointsByTrademark() {
+        checkoutService.addProduct(milk_7);
+        checkoutService.addProduct(milk_7);
+        checkoutService.addProduct(bred_3);
+
+        Condition condition = new ByTrademark(10, Trademark.YAGOTUNSKE);
+        Reward reward = new FlatReward(10);
+
+        checkoutService.useOffer(new BonusOffer(testDate, condition, reward));
+
+        Check check = checkoutService.closeCheck();
+
+        assertThat(check.getTotalPoints(), is(27));
+    }
+
+    @Test
+    void useOffer__extraFlatPointsByCategory() {
+        checkoutService.addProduct(milk_7);
+        checkoutService.addProduct(milk_7);
+
+        Condition condition = new ByCategory(Category.MILK);
+        Reward reward = new FlatReward(10);
+
+        checkoutService.useOffer(new BonusOffer(testDate, condition, reward));
+
+        Check check = checkoutService.closeCheck();
+
+        assertThat(check.getTotalPoints(), is(24));
+    }
+
+    @Test
+    void useOffer__extraFactorPointsByTotalCost() {
+        checkoutService.addProduct(milk_7);
+        checkoutService.addProduct(milk_7);
+        checkoutService.addProduct(milk_7);
+        checkoutService.addProduct(bred_3);
+
+        Condition condition = new TotalCost(15);
+        Reward reward = new FactorReward(p -> p.getProductCategory() == Category.MILK, 2);
+
+        checkoutService.useOffer(new BonusOffer(testDate, condition, reward));
+
+        Check check = checkoutService.closeCheck();
+
+        assertThat(check.getTotalPoints(), is(45));
+    }
+
+    @Test
+    void useOffer__extraFactorPointsByTrademark() {
+        checkoutService.addProduct(milk_7);
+        checkoutService.addProduct(milk_7);
+        checkoutService.addProduct(bred_3);
+
+        Condition condition = new ByTrademark(10, Trademark.YAGOTUNSKE);
+        Reward reward = new FactorReward(p -> p.getProductTrademark() == Trademark.YAGOTUNSKE, 2);
+
+        checkoutService.useOffer(new BonusOffer(testDate, condition, reward));
+
+        Check check = checkoutService.closeCheck();
+
+        assertThat(check.getTotalPoints(), is(31));
     }
 }

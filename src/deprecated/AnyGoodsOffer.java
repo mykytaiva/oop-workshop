@@ -1,4 +1,4 @@
-package checkout;
+/*package checkout;
 
 import java.time.LocalDate;
 
@@ -26,3 +26,4 @@ public class AnyGoodsOffer extends Offer {
         check.addOffer(this);
     }
 }
+*/

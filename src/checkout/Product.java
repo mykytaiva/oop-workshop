@@ -20,4 +20,12 @@ public class Product {
     public Product(int price, String name) {
         this(price, name, null, null);
     }
+
+    public Category getProductCategory(){
+        return this.category;
+    }
+
+    public Trademark getProductTrademark(){
+        return this.trademark;
+    }
 }

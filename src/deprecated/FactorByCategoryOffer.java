@@ -1,10 +1,11 @@
-package checkout;
+/*package checkout;
 
 import java.time.LocalDate;
 
 public class FactorByCategoryOffer extends Offer {
     final Category category;
     final int factor;
+    private int points;
 
     public FactorByCategoryOffer(Category category, int factor, LocalDate expiryDate) {
         super(expiryDate);
@@ -14,17 +15,14 @@ public class FactorByCategoryOffer extends Offer {
 
     @Override
     public boolean isValid(Check check) {
-        int points = check.getSubCost(p -> p.category == this.category);
-        check.addPoints(points * (this.factor - 1));
-
-        if (points != 0) {
-            return true;
-        }
-        return false;
+        points = check.getSubCost(p -> p.category == this.category);
+        return points != 0;
     }
 
     @Override
     public void apply(Check check) {
         check.addOffer(this);
+        check.addPoints(points * (this.factor - 1));
     }
 }
+*/

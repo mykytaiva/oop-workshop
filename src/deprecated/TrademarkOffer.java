@@ -1,4 +1,4 @@
-package checkout;
+/*package checkout;
 
 import java.time.LocalDate;
 
@@ -27,3 +27,4 @@ public class TrademarkOffer extends Offer {
         check.addPoints(this.points);
     }
 }
+*/

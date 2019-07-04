@@ -5,14 +5,17 @@ import java.time.LocalDate;
 public abstract class Offer {
 
     private final LocalDate expiryDate;
+    protected Condition condition;
 
-    public Offer (LocalDate expiryDate) {
+    public Offer (LocalDate expiryDate, Condition condition) {
         this.expiryDate = expiryDate;
+        this.condition = condition;
     }
 
-    public void useExpiredCheck(Check check){
+    public void useSuitableCheck(Check check){
         if (this.isExpired() && isValid(check)) {
             apply(check);
+            check.addOffer(this);
         }
     }
 
