@@ -2,6 +2,7 @@ package checkout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class Check {
     private List<Product> products = new ArrayList<>();
@@ -26,16 +27,9 @@ public class Check {
         this.points += points;
     }
 
-    int getCostByCategory(Category category) {
+    int getSubCost(Predicate<Product> predicate) {
         return products.stream()
-                .filter(p -> p.category == category)
-                .mapToInt(p -> p.price)
-                .reduce(0, (a, b) -> a + b);
-    }
-
-    int getCostByTrademark(Trademark trademark) {
-        return products.stream()
-                .filter(p -> p.trademark == trademark)
+                .filter(predicate)
                 .mapToInt(p -> p.price)
                 .reduce(0, (a, b) -> a + b);
     }

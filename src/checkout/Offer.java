@@ -1,20 +1,25 @@
 package checkout;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public abstract class Offer {
 
     private final LocalDate expiryDate;
-    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
-    public Offer (String expiryDate) {
-        this.expiryDate = LocalDate.parse(expiryDate, dateTimeFormatter);
+    public Offer (LocalDate expiryDate) {
+        this.expiryDate = expiryDate;
+    }
+
+    public void useExpiredCheck(Check check){
+        if (this.isExpired() && isValid(check)) {
+            apply(check);
+        }
     }
 
     public abstract void apply(Check check);
+    public abstract boolean isValid(Check check);
 
-    boolean isValidDate() {
+    boolean isExpired() {
         return LocalDate.now().isBefore(this.expiryDate);
     }
 }

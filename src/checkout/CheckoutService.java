@@ -20,7 +20,7 @@ public class CheckoutService {
 
     public Check closeCheck() {
         for (Offer offer : offers) {
-            offer.apply(check);
+            offer.useExpiredCheck(check);
         }
 
         Check closedCheck = check;
@@ -29,8 +29,6 @@ public class CheckoutService {
     }
 
     public void useOffer(Offer offer) {
-        if (offer.isValidDate()) {
-            offers.add(offer);
-        }
+        offers.add(offer);
     }
 }

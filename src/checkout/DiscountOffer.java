@@ -1,20 +1,37 @@
 package checkout;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 public class DiscountOffer extends Offer {
     private final Category category;
+    private List<Product> suitableProducts = new ArrayList<>();
 
-    public DiscountOffer(Category category, String expiryDate) {
+    public DiscountOffer(Category category, LocalDate expiryDate) {
         super(expiryDate);
         this.category = category;
     }
 
     @Override
-    public void apply(Check check){
+    public boolean isValid(Check check) {
         for (Product product : check.getProducts()) {
-            int productPrice = product.price;
             if (product.category == this.category) {
-                check.getDiscountCost((int)(productPrice * 0.5));
+                suitableProducts.add(product);
             }
         }
+
+        if (!suitableProducts.isEmpty()){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void apply(Check check){
+        for (Product product: suitableProducts) {
+            check.getDiscountCost((int)(product.price * 0.5));
+        }
+        suitableProducts.clear();
     }
 }
