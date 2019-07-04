@@ -1,11 +1,10 @@
 import checkout.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 import java.time.LocalDate;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 
 public class CheckoutServiceTest {
 
@@ -140,10 +139,13 @@ public class CheckoutServiceTest {
         assertThat(check.getTotalPoints(), is(12));
     }
 
-    /*
     @Test
     void useOffer__getHalfPriceDiscount() {
-        checkoutService.useOffer(new DiscountOffer(Category.MILK, testDate));
+
+        Condition condition = new TotalCost(10);
+        DiscountRule discount = new DiscountOffer()
+
+        checkoutService.useOffer(new DiscountOffer(testDate, condition, new PercentDiscount(50, "Milk")));
 
         checkoutService.addProduct(milk_7);
         checkoutService.addProduct(bred_3);
@@ -152,7 +154,7 @@ public class CheckoutServiceTest {
         Check check = checkoutService.closeCheck();
 
         assertThat(check.getTotalCost(), is(10));
-    }*/
+    }
 
     @Test
     void useOffer__factorByTrademark() {
