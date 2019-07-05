@@ -1,4 +1,15 @@
 import checkout.*;
+import checkout.conditions.ByCategory;
+import checkout.conditions.ByTrademark;
+import checkout.conditions.Condition;
+import checkout.conditions.TotalCost;
+import checkout.offers.bonus.BonusOffer;
+import checkout.offers.bonus.FactorReward;
+import checkout.offers.bonus.FlatReward;
+import checkout.offers.bonus.Reward;
+import checkout.offers.discount.DiscountByPercents;
+import checkout.offers.discount.DiscountOffer;
+import checkout.offers.discount.DiscountStrategy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -143,12 +154,12 @@ public class CheckoutServiceTest {
     void useOffer__getHalfPriceDiscount() {
 
         Condition condition = new TotalCost(10);
-        DiscountRule discount = new DiscountOffer()
+        DiscountStrategy discount = new DiscountByPercents(50, Category.MILK);
 
-        checkoutService.useOffer(new DiscountOffer(testDate, condition, new PercentDiscount(50, "Milk")));
+        checkoutService.useOffer(new DiscountOffer(testDate, condition, discount));
 
         checkoutService.addProduct(milk_7);
-        checkoutService.addProduct(bred_3);
+        checkoutService.addProduct(milk_7);
         checkoutService.addProduct(bred_3);
 
         Check check = checkoutService.closeCheck();

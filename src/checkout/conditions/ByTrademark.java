@@ -1,4 +1,7 @@
-package checkout;
+package checkout.conditions;
+
+import checkout.Check;
+import checkout.Trademark;
 
 public class ByTrademark implements Condition {
     private Trademark trademark;
@@ -11,6 +14,6 @@ public class ByTrademark implements Condition {
 
     @Override
     public boolean checkCondition(Check check) {
-        return check.getSubCost(p -> p.trademark == this.trademark) >= requiredAmount;
+        return check.getSubCost(p -> p.getProductTrademark() == this.trademark) >= requiredAmount;
     }
 }

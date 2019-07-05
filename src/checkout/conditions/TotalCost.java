@@ -1,4 +1,6 @@
-package checkout;
+package checkout.conditions;
+
+import checkout.Check;
 
 public class TotalCost implements Condition {
 

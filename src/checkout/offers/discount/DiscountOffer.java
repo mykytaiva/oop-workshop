@@ -1,11 +1,15 @@
-package checkout;
+package checkout.offers.discount;
+
+import checkout.Check;
+import checkout.conditions.Condition;
+import checkout.offers.Offer;
 
 import java.time.LocalDate;
 
 public class DiscountOffer extends Offer {
-    private DiscountRule discount;
+    private DiscountStrategy discount;
 
-    public DiscountOffer(LocalDate expiryDate, Condition condition, DiscountRule discount) {
+    public DiscountOffer(LocalDate expiryDate, Condition condition, DiscountStrategy discount) {
         super(expiryDate, condition);
         this.discount = discount;
     }

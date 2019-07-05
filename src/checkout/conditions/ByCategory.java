@@ -1,4 +1,7 @@
-package checkout;
+package checkout.conditions;
+
+import checkout.Category;
+import checkout.Check;
 
 public class ByCategory implements Condition {
 
@@ -10,6 +13,6 @@ public class ByCategory implements Condition {
 
     @Override
     public boolean checkCondition(Check check) {
-        return check.getSubCost(p -> p.category == this.category) != 0;
+        return check.getSubCost(p -> p.getProductCategory() == this.category) != 0;
     }
 }

@@ -1,4 +1,7 @@
-package checkout;
+package checkout.offers.bonus;
+
+import checkout.Check;
+import checkout.Product;
 
 import java.util.function.Predicate;
 

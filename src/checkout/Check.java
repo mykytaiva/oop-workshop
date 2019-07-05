@@ -1,5 +1,7 @@
 package checkout;
 
+import checkout.offers.Offer;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -23,18 +25,18 @@ public class Check {
         return getTotalCost() + points;
     }
 
-    void addPoints(int points) {
+    public void addPoints(int points) {
         this.points += points;
     }
 
-    int getSubCost(Predicate<Product> predicate) {
+    public int getSubCost(Predicate<Product> predicate) {
         return products.stream()
                 .filter(predicate)
                 .mapToInt(p -> p.price)
                 .reduce(0, (a, b) -> a + b);
     }
 
-    void addOffer(Offer offer) {
+    public void addOffer(Offer offer) {
         usedOffers.add(offer);
     }
 
